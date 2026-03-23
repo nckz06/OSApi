@@ -6,6 +6,7 @@ package br.gm.nicolas.OSApiApplication.api.controller;
 
 import br.gm.nicolas.OSApiApplication.domain.model.Cliente;
 import br.gm.nicolas.OSApiApplication.domain.repository.ClienteRepository;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class ClienteController {
     
     @PostMapping("/clientes")
     @ResponseStatus(HttpStatus.CREATED)
-    public Cliente adicionar(@RequestBody Cliente cliente) {
+    public Cliente adicionar(@Valid @RequestBody Cliente cliente) {
         
         return clienteRepository.save(cliente);
         
@@ -60,7 +61,7 @@ public class ClienteController {
     }
     
     @PutMapping("/clientes/{clienteID}")
-    public ResponseEntity<Cliente> atualizar(@PathVariable Long clienteID,
+    public ResponseEntity<Cliente> atualizar(@Valid @PathVariable Long clienteID,
                @RequestBody Cliente cliente) {
         
         if (!clienteRepository.existsById(clienteID)) {
