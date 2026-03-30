@@ -19,8 +19,15 @@ public class ProblemaException {
     
     private List<CampoProblema> listaCampoProblema;
     
+    public List<CampoProblema> getCampos() {
+        return listaCampoProblema;
+    }
+    
+    public void setCampos(List<CampoProblema> campos) {
+        this.listaCampoProblema = campos;
+    }
 
-    public Integer getStatus() {
+        public Integer getStatus() {
         return status;
     }
 
@@ -72,14 +79,6 @@ public class ProblemaException {
             this.mensagemCampo = mensagemCampo;
         }
         
-    }
-    
-    public List<CampoProblema> getCampos() {
-        return listaCampoProblema;
-    }
-    
-    public void setCampos(List<CampoProblema> campos) {
-        this.listaCampoProblema = campos;
     }
     
 }
