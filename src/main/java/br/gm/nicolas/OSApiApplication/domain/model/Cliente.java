@@ -36,7 +36,7 @@ public class Cliente {
     @NotBlank
     @Size(max = 20)
     private String telefone;
-
+    
     public long getId() {
         return id;
     }
