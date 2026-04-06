@@ -13,7 +13,6 @@ import br.gm.nicolas.OSApiApplication.domain.repository.OrdemServicoRepository;
 import br.gm.nicolas.OSApiApplication.domain.service.ComentarioService;
 import br.gm.nicolas.OSApiApplication.domain.service.OrdemServicoService;
 import jakarta.validation.Valid;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,18 +151,6 @@ public class OrdemServicoController {
         
         ordemServico.get().setComentario(comentarioOS);
         return ordemServicoRepository.save(ordemServico.get());
-    }
-    
-    @DeleteMapping("/{ordemID}")
-    public ResponseEntity<Void> excluir(@PathVariable Long ordemID) {
-        
-        if (!ordemServicoRepository.existsById(ordemID)) {
-            return ResponseEntity.notFound().build();
-        }
-        
-        ordemServicoService.excluir(ordemID);
-        return ResponseEntity.noContent().build();
-        
     }
     
     @DeleteMapping("/delete-comentario/{ordemID}")
