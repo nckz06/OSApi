@@ -10,6 +10,7 @@ import br.gm.nicolas.OSApiApplication.domain.service.ClienteService;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -51,7 +53,7 @@ public class ClienteController {
         
     }
     
-    @GetMapping("/clientes/{clienteID}")
+    @GetMapping("/cliente/{clienteID}")
     public ResponseEntity<Cliente> buscar(@PathVariable Long clienteID) {
         
         Optional<Cliente> cliente = clienteRepository.findById(clienteID);
@@ -64,7 +66,7 @@ public class ClienteController {
         
     }
     
-    @PutMapping("/clientes/{clienteID}")
+    @PutMapping("/cliente/{clienteID}")
     public ResponseEntity<Cliente> atualizar(@Valid @PathVariable Long clienteID,
                @RequestBody Cliente cliente) {
         
@@ -78,7 +80,7 @@ public class ClienteController {
         
     }
     
-    @DeleteMapping("/clientes/{clienteID}")
+    @DeleteMapping("/cliente/{clienteID}")
     public ResponseEntity<Void> excluir(@PathVariable Long clienteID) {
         
         if (!clienteRepository.existsById(clienteID)) {

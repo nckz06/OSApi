@@ -7,6 +7,7 @@ package br.gm.nicolas.OSApiApplication.api.controller;
 import br.gm.nicolas.OSApiApplication.domain.dto.AtualizaStatusDTO;
 import br.gm.nicolas.OSApiApplication.domain.model.Cliente;
 import br.gm.nicolas.OSApiApplication.domain.model.OrdemServico;
+import br.gm.nicolas.OSApiApplication.domain.model.StatusOrdemServico;
 import br.gm.nicolas.OSApiApplication.domain.repository.ClienteRepository;
 import br.gm.nicolas.OSApiApplication.domain.repository.OrdemServicoRepository;
 import br.gm.nicolas.OSApiApplication.domain.service.OrdemServicoService;
@@ -14,6 +15,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -60,6 +62,36 @@ public class OrdemServicoController {
         } else {
             return ResponseEntity.ok(ordemServico);
         }
+        
+    }
+    
+    @GetMapping("/status/{statusOrdem}")
+    public ResponseEntity<List<OrdemServico>> listarPorStatus(@PathVariable String statusOrdem) {
+        
+        List<OrdemServico> ordemServico = ordemServicoRepository.findByStatusIgnoreCase(statusOrdem);
+        
+        if (ordemServico.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(ordemServico);
+        }
+        
+    }
+    
+    @GetMapping("/{statusOrdem}/cliente")
+    public ResponseEntity<List<OrdemServico>> listarPorStatusCliente(
+            @PathVariable String statusOrdem,
+            @RequestParam(name="id") Long clienteID) {
+        
+        System.out.println(statusOrdem);
+        List<OrdemServico> ordemServico = ordemServicoRepository.findByStatusClienteIgnoreCase(clienteID, statusOrdem);
+        
+        if (ordemServico.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(ordemServico);
+        }
+        
         
     }
     

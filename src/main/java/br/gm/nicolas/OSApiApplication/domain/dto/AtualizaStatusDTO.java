@@ -13,8 +13,5 @@ import jakarta.validation.constraints.NotNull;
  */
 public record AtualizaStatusDTO(
     @NotNull(message = "Status é obrigatório!")
-    StatusOrdemServico status) {
-
-    
-    
-}
+    StatusOrdemServico status
+) {}
