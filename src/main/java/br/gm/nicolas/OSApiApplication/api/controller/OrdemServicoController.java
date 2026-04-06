@@ -6,16 +6,17 @@ package br.gm.nicolas.OSApiApplication.api.controller;
 
 import br.gm.nicolas.OSApiApplication.domain.dto.AtualizaStatusDTO;
 import br.gm.nicolas.OSApiApplication.domain.model.Cliente;
+import br.gm.nicolas.OSApiApplication.domain.model.Comentario;
 import br.gm.nicolas.OSApiApplication.domain.model.OrdemServico;
-import br.gm.nicolas.OSApiApplication.domain.model.StatusOrdemServico;
 import br.gm.nicolas.OSApiApplication.domain.repository.ClienteRepository;
 import br.gm.nicolas.OSApiApplication.domain.repository.OrdemServicoRepository;
+import br.gm.nicolas.OSApiApplication.domain.service.ComentarioService;
 import br.gm.nicolas.OSApiApplication.domain.service.OrdemServicoService;
 import jakarta.validation.Valid;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,6 +46,9 @@ public class OrdemServicoController {
     
     @Autowired
     private OrdemServicoService ordemServicoService;
+    
+    @Autowired
+    private ComentarioService comentarioService;
     
     @GetMapping
     public List<OrdemServico> listar() {
@@ -82,8 +86,7 @@ public class OrdemServicoController {
     public ResponseEntity<List<OrdemServico>> listarPorStatusCliente(
             @PathVariable String statusOrdem,
             @RequestParam(name="id") Long clienteID) {
-        
-        System.out.println(statusOrdem);
+
         List<OrdemServico> ordemServico = ordemServicoRepository.findByStatusClienteIgnoreCase(clienteID, statusOrdem);
         
         if (ordemServico.isEmpty()) {
@@ -137,6 +140,20 @@ public class OrdemServicoController {
         }
     }
     
+    @PutMapping("/atualiza-comentario/{ordemID}")
+    public OrdemServico atualizaComentario(
+            @PathVariable Long ordemID,
+            @RequestBody Comentario comentario) {
+        
+        Optional<OrdemServico> ordemServico = ordemServicoRepository.findById(ordemID);
+        
+        comentario.setId(ordemServico.get().getComentario().getId());
+        Comentario comentarioOS = comentarioService.criar(comentario);
+        
+        ordemServico.get().setComentario(comentarioOS);
+        return ordemServicoRepository.save(ordemServico.get());
+    }
+    
     @DeleteMapping("/{ordemID}")
     public ResponseEntity<Void> excluir(@PathVariable Long ordemID) {
         
@@ -149,10 +166,43 @@ public class OrdemServicoController {
         
     }
     
+    @DeleteMapping("/delete-comentario/{ordemID}")
+    public ResponseEntity<Void> excluirComentario(@PathVariable Long ordemID) {
+        
+        if (!ordemServicoRepository.existsById(ordemID)) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        Optional<OrdemServico> ordemServico = ordemServicoRepository.findById(ordemID);
+        
+        Long comentarioID = ordemServico.get().getComentario().getId();
+        
+        comentarioService.excluir(comentarioID);
+        ordemServico.get().setComentario(null);
+        ordemServicoRepository.save(ordemServico.get());
+        
+        return ResponseEntity.noContent().build();
+        
+    }
+    
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrdemServico criar(@RequestBody OrdemServico ordemServico) {
         return ordemServicoService.criar(ordemServico);
+    }
+    
+    @PostMapping("/adiciona-comentario/{ordemID}")
+    public OrdemServico adicionaComentario(
+            @PathVariable Long ordemID,
+            @RequestBody Comentario comentario
+        ) {
+        
+        Optional<OrdemServico> ordemServico = ordemServicoRepository.findById(ordemID);
+        Comentario comentarioOS = comentarioService.criar(comentario);
+        
+        ordemServico.get().setComentario(comentarioOS);
+        return ordemServicoRepository.save(ordemServico.get());
+        
     }
     
 }

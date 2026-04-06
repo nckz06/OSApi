@@ -11,6 +11,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -38,6 +40,9 @@ public class OrdemServico {
     
     private LocalDateTime dataAbertura;
     private LocalDateTime dataFinalizacao;
+    
+    @OneToOne
+    private Comentario comentario;
 
     public OrdemServico() {
     }
@@ -46,6 +51,13 @@ public class OrdemServico {
         this.cliente = cliente;
         this.descricao = descricao;
         this.preco = preco;
+    }
+    
+    public OrdemServico(Cliente cliente, String descricao, BigDecimal preco, Comentario comentario) {
+        this.cliente = cliente;
+        this.descricao = descricao;
+        this.preco = preco;
+        this.comentario = comentario;
     }
 
     public Long getId() {
@@ -103,7 +115,15 @@ public class OrdemServico {
     public void setDataFinalizacao(LocalDateTime dataFinalizacao) {
         this.dataFinalizacao = dataFinalizacao;
     }
+    
+    public Comentario getComentario() {
+        return comentario;
+    }
 
+    public void setComentario(Comentario comentario) {
+        this.comentario = comentario;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -125,7 +145,7 @@ public class OrdemServico {
         final OrdemServico other = (OrdemServico) obj;
         return Objects.equals(this.id, other.id);
     }
-    
+
     
     
 }
