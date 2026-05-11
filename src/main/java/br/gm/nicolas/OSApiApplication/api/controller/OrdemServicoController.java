@@ -139,57 +139,10 @@ public class OrdemServicoController {
         }
     }
     
-    @PutMapping("/atualiza-comentario/{ordemID}")
-    public OrdemServico atualizaComentario(
-            @PathVariable Long ordemID,
-            @RequestBody Comentario comentario) {
-        
-        Optional<OrdemServico> ordemServico = ordemServicoRepository.findById(ordemID);
-        
-        comentario.setId(ordemServico.get().getComentario().getId());
-        Comentario comentarioOS = comentarioService.criar(comentario);
-        
-        ordemServico.get().setComentario(comentarioOS);
-        return ordemServicoRepository.save(ordemServico.get());
-    }
-    
-    @DeleteMapping("/delete-comentario/{ordemID}")
-    public ResponseEntity<Void> excluirComentario(@PathVariable Long ordemID) {
-        
-        if (!ordemServicoRepository.existsById(ordemID)) {
-            return ResponseEntity.notFound().build();
-        }
-        
-        Optional<OrdemServico> ordemServico = ordemServicoRepository.findById(ordemID);
-        
-        Long comentarioID = ordemServico.get().getComentario().getId();
-        
-        comentarioService.excluir(comentarioID);
-        ordemServico.get().setComentario(null);
-        ordemServicoRepository.save(ordemServico.get());
-        
-        return ResponseEntity.noContent().build();
-        
-    }
-    
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrdemServico criar(@RequestBody OrdemServico ordemServico) {
         return ordemServicoService.criar(ordemServico);
-    }
-    
-    @PostMapping("/adiciona-comentario/{ordemID}")
-    public OrdemServico adicionaComentario(
-            @PathVariable Long ordemID,
-            @RequestBody Comentario comentario
-        ) {
-        
-        Optional<OrdemServico> ordemServico = ordemServicoRepository.findById(ordemID);
-        Comentario comentarioOS = comentarioService.criar(comentario);
-        
-        ordemServico.get().setComentario(comentarioOS);
-        return ordemServicoRepository.save(ordemServico.get());
-        
     }
     
 }

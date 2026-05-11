@@ -6,7 +6,6 @@ package br.gm.nicolas.OSApiApplication.domain.repository;
 
 import br.gm.nicolas.OSApiApplication.domain.model.Cliente;
 import br.gm.nicolas.OSApiApplication.domain.model.OrdemServico;
-import br.gm.nicolas.OSApiApplication.domain.model.StatusOrdemServico;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
