@@ -145,4 +145,21 @@ public class OrdemServicoController {
         return ordemServicoService.criar(ordemServico);
     }
     
+    @DeleteMapping("/{ordemID}")
+    public ResponseEntity<Void> excluirOrdemServico(@PathVariable Long ordemID) {
+        
+        if (!ordemServicoRepository.existsById(ordemID)) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        Optional<OrdemServico> ordemServico = ordemServicoRepository.findById(ordemID);
+        
+        Long comentarioID = ordemServico.get().getComentario().getId();
+        
+        comentarioService.excluir(comentarioID);
+        ordemServicoService.excluir(ordemServico.get().getId());
+        
+        return ResponseEntity.noContent().build();
+    }
+    
 }
